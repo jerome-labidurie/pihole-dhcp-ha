@@ -1,6 +1,6 @@
 This simple project aim to manage a kind of *High Availability* for the DHCP between 2 PiHole.
 
-This project is not a part of the official Pi-hole project
+This project is not a part of the official [Pi-hole](https://pi-hole.net/) project
 
 # architecture
 
