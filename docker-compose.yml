@@ -38,7 +38,7 @@ services:
         condition: service_healthy
 
   monitor:
-    image: ...
+    image: ghcr.io/jerome-labidurie/pihole-dhcp-ha:latest
     container_name: monitor
     environment:
       TZ: Europe/Paris
@@ -46,7 +46,7 @@ services:
       MPH_SECONDARY: http://192.168.1.80:8087|myReplicaPassword
       # MPH_MONITOR_DELAY: 60
       # MPH_VERBOSE: 1
-      # MPH_SECONDARY_MAC: 0a:df:42:4b:50:ba
+      # MPH_SECONDARY_MAC: 0a:df:de:ad:be:ef
     depends_on:
       pihole:
         condition: service_healthy
