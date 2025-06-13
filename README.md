@@ -1,20 +1,20 @@
-This simple project aim to manage a kind of *High Availability* for the DHCP between 2 PiHole.
+This simple project aim to manage a kind of *High Availability* for the DHCP between 2 Pi-hole.
 
-This project is not a part of the official [Pi-hole](https://pi-hole.net/) project
+This is not a part of the official [Pi-hole](https://pi-hole.net/) project
 
 # architecture
 
-Both PiHole are always serving DNS and are both advertised as is, in the DHCP messages. Only *one* PiHole DHCP server is running at any time.
+Both Pi-hole are always serving DNS and are both advertised as is, in the DHCP messages. Only *one* Pi-hole DHCP server is running at any time.
 
-Monitor will simply check if dhcp is running on the *Primary PiHole*.
-* if not, it will start dhcp on the *Secondary PiHole*
-* if yes, it will stop dhcp on the *Secondary PiHole*
+pihole-dhcp-ha will simply check if dhcp is running on the *Primary Pi-hole*.
+* if not, it will start dhcp on the *Secondary Pi-hole*
+* if yes, it will stop dhcp on the *Secondary Pi-hole*
 
 ```mermaid
 sequenceDiagram
-  participant m as Monitor
-  participant pp as PiHole Primary
-  participant ps as PiHole Secondary
+  participant m as pihole-dhcp-ha
+  participant pp as Pi-hole Primary
+  participant ps as Pi-hole Secondary
   loop Every MPH_MONITOR_DELAY
   m->>pp: DHCP Inform
     alt is Alive
@@ -32,12 +32,12 @@ Replication of configuration from *Primary* to *Secondary* is done thru [nebula-
 ```mermaid
 flowchart LR
   subgraph PiHoleP
-    pp[PiHole Primary]
+    pp[Pi-hole Primary]
   end
   subgraph PiHoleM
-    ps[PiHole Secondary]
+    ps[Pi-hole Secondary]
     ns[nebula-sync]
-    m[Monitor]
+    m[pihole-dhcp-ha]
   end
   c[Customer]
   pp -- replicate --> ns
@@ -68,26 +68,28 @@ See [docker-compose.yml](docker-compose.yml) for a *full* compose example.
 | MPH_VERBOSE | verbosity of the logs. 0 will show only dhcp failure, 2 is very verbose and **dump passwords** | 1 | 2 |
 | MPH_SECONDARY_MAC | mac address associated with the secondary pihole ip address. | mac of the *default* interface | 0a:df:de:ad:be:ef |
 
-# pihole & nebula-sync parameters
-* pihole
+# Pi-hole & nebula-sync parameters
+* [Pi-hole](https://pi-hole.net/)
   * *webserver.api.app_sudo* must be set to true on primary and secondary, or true on secondary and excluded from nebula-sync :/
-  * dhcp server should have a configuration with @mac/@secondary_ip for the answer to DHCPINFORM to be right. However, tests shows that this seems to be not mandatory with dnsmasq
-  * dhcpd should advertise the 2 dns servers. For this, activate *misc.etc_dnsmasq_d* and create a `99-second-dns.conf`, or add to *misc.dnsmasq_lines*
+  * dhcp server should have a configuration with @mac/@secondary_ip for the answer to DHCPINFORM to be right. However, tests shows that this seems to be not mandatory with the *dnsmasq* of Pi-hole
+  * dhcpd should advertise the 2 dns servers. For this, 
+    * activate *misc.etc_dnsmasq_d* and create a `99-second-dns.conf`, 
+    * or add to *misc.dnsmasq_lines*
 ```
 ## add a second DNS to dhcp answer
-# this need the pihole option dhcp.multiDNS to be unchecked !
+# this need the Pi-hole option dhcp.multiDNS to be unchecked !
 dhcp-option=option:dns-server,192.168.1.20,192.168.1.80,192.168.1.20,192.168.1.80
-# this is in conflict with pihole option dhcp.ipv6
+# this is in conflict with Pi-hole option dhcp.ipv6
 dhcp-option=option6:dns-server,[2a01:xxxx:xxxx:xxxx::fec0:fe93],[fe80::xx:xx:fec0:fe93],[2a01:xxxx:xxxx:xxxx::d62c:dc],[fe80::xx:xx:d62c:dc]
 ```
 
-* nebula
+* [nebula-sync](https://github.com/lovelaze/nebula-sync)
   * dhcp.active must not be synced : `SYNC_CONFIG_DHCP_EXCLUDE: active`
   * you might also want to disable the interface name sync : `SYNC_CONFIG_DNS_EXCLUDE: interface`
 
 # caveats
-* DHCP might be unavailable for up to MPH_MONITOR_DELAY seconds
-* when Primary DHCP comes back online, there might be 2 DHCP servers active for up to MPH_MONITOR_DELAY seconds
+* DHCP might be unavailable for up to `MPH_MONITOR_DELAY` seconds
+* when Primary DHCP comes back online, there might be 2 DHCP servers active for up to `MPH_MONITOR_DELAY` seconds
 * IP leases offered by the Secondary DHCP server (during Primary offline time) will not be known by the Primary
 
 # logs
