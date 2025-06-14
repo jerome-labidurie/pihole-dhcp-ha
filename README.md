@@ -1,6 +1,6 @@
 
-![GitHub Release](https://img.shields.io/github/v/release/jerome-labidurie/pihole-dhcp-ha?style=flat)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jerome-labidurie/pihole-dhcp-ha/docker-publish.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/jerome-labidurie/pihole-dhcp-ha?style=flat)](https://github.com/jerome-labidurie/pihole-dhcp-ha/releases)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jerome-labidurie/pihole-dhcp-ha/docker-publish.yml)](https://github.com/jerome-labidurie/pihole-dhcp-ha/actions)
 
 This simple project aim to manage a kind of *High Availability* for the DHCP between 2 Pi-hole.
 
