@@ -99,12 +99,12 @@ dhcp-option=option6:dns-server,[2a01:xxxx:xxxx:xxxx::fec0:fe93],[fe80::xx:xx:fec
 # logs
 Example of running logs
 ```
-# Primary (192.1688.1.20) is running
+# Primary (192.168.1.20) is running
 2025-06-13T17:25:05+02:00 INF Checking 192.168.1.20 for 0a:df:de:ad:be:ef/192.168.1.80
 2025-06-13T17:25:05+02:00 INF dhcp 192.168.1.20 is alive, deactivate http://192.168.1.80:8087 if needed
 2025-06-13T17:25:08+02:00 INF dhcp on http://192.168.1.80:8087 is false
 
-# Primary (192.1688.1.20) is dead, activate secondary (192.1688.1.80)
+# Primary (192.168.1.20) is dead, activate secondary (192.168.1.80)
 2025-06-13T17:26:09+02:00 INF Checking 192.168.1.20 for 0a:df:de:ad:be:ef/192.168.1.80
 2025-06-13T17:26:14+02:00 ERR Failed to get dhcp ack, assume 192.168.1.20 is dead
 2025-06-13T17:26:17+02:00 INF Setting http://192.168.1.80:8087 from false to true ...
@@ -113,7 +113,7 @@ Example of running logs
 2025-06-13T17:27:29+02:00 ERR Failed to get dhcp ack, assume 192.168.1.20 is dead
 2025-06-13T17:27:32+02:00 INF dhcp on http://192.168.1.80:8087 is true
 
-# Primary (192.1688.1.20) is back, deactivate secondary (192.1688.1.80)
+# Primary (192.168.1.20) is back, deactivate secondary (192.168.1.80)
 2025-06-13T17:28:33+02:00 INF Checking 192.168.1.20 for 0a:df:de:ad:be:ef/192.168.1.80
 2025-06-13T17:28:33+02:00 INF dhcp 192.168.1.20 is alive, deactivate http://192.168.1.80:8087 if needed
 2025-06-13T17:28:36+02:00 INF Setting http://192.168.1.80:8087 from true to false ...
