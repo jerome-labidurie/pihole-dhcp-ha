@@ -121,7 +121,7 @@ Example of running logs
 ```
 
 # todo
-* check whatif curl fail
+* ~~check whatif curl fail~~
 * ~~manage http & https in *_URL~~
 * manage multiple replicas
 * ~~use the same syntax as nebula for URL|password~~

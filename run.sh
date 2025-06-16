@@ -50,7 +50,7 @@ set_dhcp() {
     -d "{\"password\":\"${PWD}\"}" )
   if [ $? -ne 0 ]
   then
-    err "Cannot connect to ${URL}"
+    err "Cannot auth to ${URL}"
     return 1
   fi
   dbg "auth: $SID"
@@ -62,6 +62,11 @@ set_dhcp() {
   ACTUAL=$( curl -sS -X GET "${URL}/api/config/dhcp%2Factive"  \
     -H 'accept: application/json' \
     -H "sid: ${SID}" )
+  if [ $? -ne 0 ]
+  then
+    err "Cannot get state from ${URL}"
+    return 1
+  fi
   dbg "state: $ACTUAL"
   ACTUAL=$( echo $ACTUAL | jq -r '.config.dhcp.active' )
 
@@ -75,6 +80,11 @@ set_dhcp() {
       -H 'content-type: application/json'\
       -H "sid: ${SID}" \
       -d "{\"config\":{\"dhcp\":{\"active\": ${VALUE}}}}" &> $OUT
+    if [ $? -ne 0 ]
+    then
+      err "Cannot set state to ${ACTUAL} on ${URL}"
+      return 1
+    fi
     sleep 5 # wait for FTL restart
   fi
 
@@ -95,6 +105,11 @@ set_dhcp() {
   curl -X DELETE "${URL}/api/auth" \
     -H 'accept: application/json'\
     -H "sid: ${SID}" &> $OUT
+  if [ $? -ne 0 ]
+  then
+    err "Cannot unauth from ${URL}"
+    return 1
+  fi
 }
 
 # explode URL|pass into global variables MPH_xxx_[URL|PASS|IP]
