@@ -1,6 +1,6 @@
 # docker file to monitor pihole dhcp
 
-FROM alpine:3.22.0
+FROM alpine:3.22.1
 LABEL org.opencontainers.image.source=https://github.com/jerome-labidurie/pihole-dhcp-ha
 LABEL org.opencontainers.image.description="kind of High Availability for Pi-hole DHCP/DNS services"
 LABEL org.opencontainers.image.licenses=GPL-3.0-only
